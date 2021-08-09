@@ -54,5 +54,8 @@
   "main": "index.js",
   "repository": "https://github.com/bolonge/instaclone-web",
   "author": "bolonge <xxs456@naver.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.8"
+  }
 }
