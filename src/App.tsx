@@ -2,6 +2,7 @@ import { useReactiveVar } from "@apollo/client";
 import { HashRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { darkModeVar, isLoggedInVar } from "./apollo";
+import Login from "./screens/Login";
 import { darkTheme, GlobalStyles, lightTheme } from "./styles";
 
 function App() {
@@ -11,7 +12,9 @@ function App() {
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <GlobalStyles />
       <div>
-        <Router></Router>
+        <Router>
+          <Login></Login>
+        </Router>
       </div>
     </ThemeProvider>
   );
