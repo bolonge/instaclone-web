@@ -6,10 +6,6 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Title = styled.h1`
-  color: ${(props) => props.theme.fontColor};
-`;
-
 const Container = styled.div`
   display: flex;
   height: 100vh;
@@ -20,7 +16,7 @@ const Container = styled.div`
 
 const WhiteBox = styled.div`
   background-color: white;
-  border: 1px solid rgb(219, 219, 219);
+  border: 1px solid ${(props) => props.theme.blue};
   width: 100%;
 `;
 
@@ -46,7 +42,7 @@ const Input = styled.input`
   border-radius: 3px;
   padding: 7px;
   background-color: #fafafa;
-  border: 0.5px solid rgb(219, 219, 219);
+  border: 0.5px solid ${(props) => props.theme.borderColor};
   margin-top: 5px;
   box-sizing: border-box;
   &::placeholder {
@@ -57,7 +53,7 @@ const Input = styled.input`
 const Button = styled.input`
   border: none;
   margin-top: 12px;
-  background-color: #0095f6;
+  background-color: ${(props) => props.theme.accent};
   color: white;
   text-align: center;
   padding: 8px 0px;
@@ -70,7 +66,7 @@ const BottomBox = styled(WhiteBox)`
   text-align: center;
   a {
     font-weight: 600;
-    color: #0095f6;
+    color: ${(props) => props.theme.accent};
   }
 `;
 
