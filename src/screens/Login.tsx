@@ -12,6 +12,8 @@ import Input from "../components/auth/Input";
 import FormBox from "../components/auth/FormBox";
 import BottomBox from "../components/auth/BottomBox";
 import routes from "../routes";
+import { useState } from "react";
+import PageTitle from "../components/PageTitle";
 
 const FacebookLogin = styled.div`
   color: #385285;
@@ -22,13 +24,18 @@ const FacebookLogin = styled.div`
 `;
 
 const Login: React.FunctionComponent = () => {
+  const [username, setUsername] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+
   return (
     <AuthLayout>
+      <PageTitle title="Log in"></PageTitle>
       <FormBox>
         <div>
           <FontAwesomeIcon icon={faInstagram} size="3x" />
         </div>
         <form>
+          {usernameError}
           <Input type="text" placeholder="Username" />
           <Input type="password" placeholder="Password" />
           <Button type="submit" value="Log in" />
