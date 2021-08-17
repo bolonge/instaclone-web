@@ -5,7 +5,11 @@ interface IProp {
 }
 
 const PageTitle: React.FunctionComponent<IProp> = ({ title }) => {
-  return <Helmet>{title} | Instaclone</Helmet>;
+  return (
+    <Helmet>
+      <title>{title} | Instaclone</title>
+    </Helmet>
+  );
 };
 
 export default PageTitle;
