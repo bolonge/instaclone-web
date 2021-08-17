@@ -15,10 +15,19 @@ import routes from "../routes";
 import PageTitle from "../components/PageTitle";
 import { SubmitHandler, useForm } from "react-hook-form";
 import FormError from "../components/auth/FormError";
+import { gql, useMutation } from "@apollo/client";
+import { logUserIn } from "../apollo";
 
 interface IForm {
   username: string;
   password: string;
+  result: string;
+}
+
+interface LoginProp {
+  ok: string;
+  error: string;
+  token: string;
 }
 
 const FacebookLogin = styled.div`
@@ -29,11 +38,56 @@ const FacebookLogin = styled.div`
   }
 `;
 
+const LOGIN_MUTATION = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      ok
+      token
+      error
+    }
+  }
+`;
+
 const Login: React.FunctionComponent = () => {
-  const { register, handleSubmit, formState } = useForm<IForm>({
+  const {
+    register,
+    handleSubmit,
+    formState,
+    getValues,
+    setError,
+    clearErrors,
+  } = useForm<IForm>({
     mode: "onChange",
   });
-  const onSubmitValid: SubmitHandler<IForm> = (data) => {};
+
+  const onCompleted = (data: any) => {
+    //무슨타입..?
+    const {
+      login: { ok, error, token },
+    } = data;
+    if (!ok) {
+      return setError("result", {
+        message: error,
+      });
+    }
+    if (token) {
+      logUserIn(token);
+    }
+  };
+  const [login, { loading }] = useMutation(LOGIN_MUTATION, { onCompleted });
+  const onSubmitValid: SubmitHandler<IForm> = (data) => {
+    if (loading) {
+      return;
+    }
+    const { username, password } = getValues();
+    login({
+      variables: { username, password },
+    });
+  };
+
+  const clearLoginError = () => {
+    clearErrors("result");
+  };
 
   return (
     <AuthLayout>
@@ -51,6 +105,7 @@ const Login: React.FunctionComponent = () => {
                 message: "Username should be longer than 5 chars.",
               },
             })}
+            onFocus={clearLoginError}
             type="text"
             placeholder="Username"
             hasError={Boolean(formState.errors?.username?.message)}
@@ -58,12 +113,18 @@ const Login: React.FunctionComponent = () => {
           <FormError message={formState.errors?.username?.message} />
           <Input
             {...register("password", { required: "Password is required" })}
+            onFocus={clearLoginError}
             type="password"
             placeholder="Password"
             hasError={Boolean(formState.errors?.password?.message)}
           />
           <FormError message={formState.errors?.password?.message} />
-          <Button type="submit" value="Log in" disabled={!formState.isValid} />
+          <Button
+            type="submit"
+            value={loading ? "Loading..." : "Log in"}
+            disabled={!formState.isValid || loading}
+          />
+          <FormError message={formState.errors?.result?.message} />
         </form>
         <Separator />
         <FacebookLogin>
