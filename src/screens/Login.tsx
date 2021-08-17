@@ -12,8 +12,14 @@ import Input from "../components/auth/Input";
 import FormBox from "../components/auth/FormBox";
 import BottomBox from "../components/auth/BottomBox";
 import routes from "../routes";
-import { useState } from "react";
 import PageTitle from "../components/PageTitle";
+import { SubmitHandler, useForm } from "react-hook-form";
+import FormError from "../components/auth/FormError";
+
+interface IForm {
+  username: string;
+  password: string;
+}
 
 const FacebookLogin = styled.div`
   color: #385285;
@@ -24,8 +30,10 @@ const FacebookLogin = styled.div`
 `;
 
 const Login: React.FunctionComponent = () => {
-  const [username, setUsername] = useState("");
-  const [usernameError, setUsernameError] = useState("");
+  const { register, handleSubmit, formState } = useForm<IForm>({
+    mode: "onChange",
+  });
+  const onSubmitValid: SubmitHandler<IForm> = (data) => {};
 
   return (
     <AuthLayout>
@@ -34,11 +42,28 @@ const Login: React.FunctionComponent = () => {
         <div>
           <FontAwesomeIcon icon={faInstagram} size="3x" />
         </div>
-        <form>
-          {usernameError}
-          <Input type="text" placeholder="Username" />
-          <Input type="password" placeholder="Password" />
-          <Button type="submit" value="Log in" />
+        <form onSubmit={handleSubmit(onSubmitValid)}>
+          <Input
+            {...register("username", {
+              required: "Username is required",
+              minLength: {
+                value: 5,
+                message: "Username should be longer than 5 chars.",
+              },
+            })}
+            type="text"
+            placeholder="Username"
+            hasError={Boolean(formState.errors?.username?.message)}
+          />
+          <FormError message={formState.errors?.username?.message} />
+          <Input
+            {...register("password", { required: "Password is required" })}
+            type="password"
+            placeholder="Password"
+            hasError={Boolean(formState.errors?.password?.message)}
+          />
+          <FormError message={formState.errors?.password?.message} />
+          <Button type="submit" value="Log in" disabled={!formState.isValid} />
         </form>
         <Separator />
         <FacebookLogin>
