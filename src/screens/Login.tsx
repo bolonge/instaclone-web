@@ -17,17 +17,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import FormError from "../components/auth/FormError";
 import { gql, useMutation } from "@apollo/client";
 import { logUserIn } from "../apollo";
+import { login, loginVariables } from "../__generated__/login";
 
 interface IForm {
   username: string;
   password: string;
   result: string;
-}
-
-interface LoginProp {
-  ok: string;
-  error: string;
-  token: string;
 }
 
 const FacebookLogin = styled.div`
@@ -60,21 +55,22 @@ const Login: React.FunctionComponent = () => {
     mode: "onChange",
   });
 
-  const onCompleted = (data: any) => {
-    //무슨타입..?
-    const {
-      login: { ok, error, token },
-    } = data;
-    if (!ok) {
-      return setError("result", {
-        message: error,
-      });
+  const [login, { loading }] = useMutation<login, loginVariables>(
+    LOGIN_MUTATION,
+    {
+      onCompleted: (data) => {
+        const { login } = data;
+        if (!login?.ok) {
+          return setError("result", {
+            message: login?.error,
+          });
+        }
+        if (login.token) {
+          logUserIn(login.token);
+        }
+      },
     }
-    if (token) {
-      logUserIn(token);
-    }
-  };
-  const [login, { loading }] = useMutation(LOGIN_MUTATION, { onCompleted });
+  );
   const onSubmitValid: SubmitHandler<IForm> = (data) => {
     if (loading) {
       return;
