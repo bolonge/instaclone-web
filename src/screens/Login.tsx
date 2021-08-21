@@ -62,7 +62,7 @@ const Login: React.FunctionComponent = () => {
         const { login } = data;
         if (!login?.ok) {
           return setError("result", {
-            message: login?.error,
+            message: login?.error ? login.error : undefined,
           });
         }
         if (login.token) {

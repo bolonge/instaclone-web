@@ -11,7 +11,7 @@ export interface login_login {
   __typename: "LoginResult";
   ok: boolean;
   token: string | null;
-  error: string | undefined;
+  error: string | null;
 }
 
 export interface login {
