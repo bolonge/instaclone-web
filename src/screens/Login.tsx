@@ -108,7 +108,7 @@ const Login: React.FunctionComponent = () => {
         <div>
           <FontAwesomeIcon icon={faInstagram} size="3x" />
         </div>
-        {location?.state?.message}
+        <Notification>{location?.state?.message}</Notification>
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
             {...register("username", {
