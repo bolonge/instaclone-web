@@ -67,7 +67,7 @@ const Login: React.FunctionComponent = () => {
     mode: "onChange",
     defaultValues: {
       username: location?.state?.username || "",
-      password: location.state.password || "",
+      password: location?.state?.password || "",
     },
   });
 
