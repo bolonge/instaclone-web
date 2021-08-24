@@ -65,14 +65,19 @@ const SignUp: React.FunctionComponent = () => {
     createAccountVariables
   >(CREATE_ACCOUNT_MUTATION, {
     onCompleted: (data) => {
+      const { username, password } = getValues();
       const { createAccount } = data;
       if (!createAccount?.ok) {
         return;
       }
-      history.push(routes.home);
+      history.push(routes.home, {
+        message: "Account created. Please log in.",
+        username,
+        password,
+      });
     },
   });
-  const { register, handleSubmit, formState, setError } = useForm<IForm>({
+  const { register, handleSubmit, formState, getValues } = useForm<IForm>({
     mode: "onChange",
   });
 
