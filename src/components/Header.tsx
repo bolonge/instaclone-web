@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { isLoggedInVar } from "../apollo";
-import useUser from "../hooks/userUser";
+import useUser from "../hooks/useUser";
 import routes from "../routes";
 
 interface IProp {}
