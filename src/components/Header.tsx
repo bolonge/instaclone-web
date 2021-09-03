@@ -45,7 +45,7 @@ const Button = styled.span`
 
 const Header: React.FunctionComponent<IProp> = () => {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
-  const loggedInUser = useUser();
+  const { data } = useUser();
   return (
     <SHeader>
       <Wrapper>
@@ -63,9 +63,13 @@ const Header: React.FunctionComponent<IProp> = () => {
               <Icon>
                 <FontAwesomeIcon icon={faCompass}></FontAwesomeIcon>
               </Icon>
-              <Icon>
-                <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
-              </Icon>
+              {data?.me?.avatar ? (
+                ""
+              ) : (
+                <Icon>
+                  <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+                </Icon>
+              )}
             </>
           ) : (
             <Link to={routes.home}>
