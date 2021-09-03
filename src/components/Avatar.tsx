@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface AvatarProps {
-  url?: string;
+  url?: string | null;
 }
 
 const SAvatar = styled.div`
@@ -17,7 +17,11 @@ const Img = styled.img`
 `;
 
 const Avatar: React.FunctionComponent<AvatarProps> = ({ url = "" }) => {
-  return <SAvatar>{url !== "" ? <Img src={url} /> : null}</SAvatar>;
+  return (
+    <SAvatar>
+      {url !== "" ? <Img src={url ? url! : undefined} /> : undefined}
+    </SAvatar>
+  );
 };
 
 export default Avatar;
