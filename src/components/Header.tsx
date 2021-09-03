@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { isLoggedInVar } from "../apollo";
 import useUser from "../hooks/useUser";
 import routes from "../routes";
+import Avatar from "./Avatar";
 
 interface IProp {}
 
@@ -43,6 +44,11 @@ const Button = styled.span`
   font-weight: 600;
 `;
 
+const IconsContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const Header: React.FunctionComponent<IProp> = () => {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const { data } = useUser();
@@ -51,26 +57,28 @@ const Header: React.FunctionComponent<IProp> = () => {
       <Wrapper>
         <Column>
           <Icon>
-            <FontAwesomeIcon icon={faInstagram}></FontAwesomeIcon>
+            <FontAwesomeIcon size={"lg"} icon={faInstagram}></FontAwesomeIcon>
           </Icon>
         </Column>
         <Column>
           {isLoggedIn ? (
-            <>
+            <IconsContainer>
               <Icon>
-                <FontAwesomeIcon icon={faHome}></FontAwesomeIcon>
+                <FontAwesomeIcon size={"lg"} icon={faHome}></FontAwesomeIcon>
               </Icon>
               <Icon>
-                <FontAwesomeIcon icon={faCompass}></FontAwesomeIcon>
+                <FontAwesomeIcon size={"lg"} icon={faCompass}></FontAwesomeIcon>
               </Icon>
               {data?.me?.avatar ? (
-                ""
+                <Icon>
+                  <Avatar url={data?.me?.avatar} />
+                </Icon>
               ) : (
                 <Icon>
-                  <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+                  <FontAwesomeIcon size={"lg"} icon={faUser}></FontAwesomeIcon>
                 </Icon>
               )}
-            </>
+            </IconsContainer>
           ) : (
             <Link to={routes.home}>
               <Button></Button>
