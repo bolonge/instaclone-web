@@ -5,6 +5,7 @@ import {
   faHeart,
   faPaperPlane,
 } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as SolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
@@ -25,6 +26,7 @@ const FEED_QUERY = gql`
       comments
       createdAt
       isMine
+      isLiked
     }
   }
 `;
@@ -47,7 +49,7 @@ const Username = styled(FatText)`
 `;
 
 const PhotoFile = styled.img`
-  min-width: 100%;
+  width: 100%;
 `;
 
 const PhotoData = styled.div`
@@ -62,6 +64,9 @@ const PhotoActions = styled.div`
     display: flex;
     align-items: center;
   }
+  svg {
+    font-size: 20px;
+  }
 `;
 
 const PhotoAction = styled.div`
@@ -75,6 +80,8 @@ const Likes = styled(FatText)`
 
 const Home = () => {
   const { data } = useQuery<seeFeed>(FEED_QUERY);
+  console.log(data);
+
   return (
     <div>
       {data?.seeFeed?.map((photo) => (
@@ -88,7 +95,11 @@ const Home = () => {
             <PhotoActions>
               <div>
                 <PhotoAction>
-                  <FontAwesomeIcon size={"2x"} icon={faHeart}></FontAwesomeIcon>
+                  <FontAwesomeIcon
+                    style={{ color: photo?.isLiked ? "tomato" : "inherit" }}
+                    size={"2x"}
+                    icon={photo?.isLiked ? SolidHeart : faHeart}
+                  ></FontAwesomeIcon>
                 </PhotoAction>
                 <PhotoAction>
                   <FontAwesomeIcon

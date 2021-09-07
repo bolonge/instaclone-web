@@ -17,12 +17,13 @@ export interface seeFeed_seeFeed {
   __typename: "Photo";
   id: number;
   user: seeFeed_seeFeed_user;
-  file: string | null;
+  file: string;
   caption: string | null;
   likes: number;
   comments: number;
   createdAt: string;
   isMine: boolean;
+  isLiked: boolean;
 }
 
 export interface seeFeed {
