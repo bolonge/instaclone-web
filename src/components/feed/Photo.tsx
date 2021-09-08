@@ -8,21 +8,28 @@ import {
 import { faHeart as SolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import gql from "graphql-tag";
-import { useMutation } from "@apollo/client";
-import { seeFeed_seeFeed_user } from "../../__generated__/seeFeed";
+import { MutationUpdaterFn, useMutation } from "@apollo/client";
+import {
+  seeFeed_seeFeed_comments,
+  seeFeed_seeFeed_user,
+} from "../../__generated__/seeFeed";
 import Avatar from "../Avatar";
 import { FatText } from "../shared";
 import {
   toggleLike,
   toggleLikeVariables,
 } from "../../__generated__/toggleLike";
+import Comments from "./Comments";
 
 interface PhotoProps {
   id?: number;
   user?: seeFeed_seeFeed_user | null;
   file?: string;
-  likes?: number;
+  likes: number;
   isLiked?: boolean;
+  caption?: string;
+  commentNumber?: number;
+  comments?: seeFeed_seeFeed_comments[] | null;
 }
 
 const TOGGLE_LIKE_MUTATION = gql`
@@ -87,15 +94,45 @@ const Photo: React.FunctionComponent<PhotoProps> = ({
   file,
   isLiked,
   likes,
+  caption,
+  commentNumber,
+  comments,
 }) => {
-  const [toggleLikeMutation, { loading }] = useMutation<
-    toggleLike,
-    toggleLikeVariables
-  >(TOGGLE_LIKE_MUTATION, {
-    variables: {
-      id,
-    },
-  });
+  const updateToggleLike: MutationUpdaterFn<toggleLike> = (cache, result) => {
+    const { data } = result;
+    if (data?.toggleLike.ok) {
+      const fragmentId = `Photo:${id}`;
+      const fragment = gql`
+        fragment BSName on Photo {
+          isLiked
+          likes
+        }
+      `;
+      cache.readFragment({
+        id: fragmentId,
+        fragment: fragment,
+      });
+      if ("isLiked" in result && "likes" in result) {
+        cache.writeFragment({
+          id: fragmentId,
+          fragment: fragment,
+          data: {
+            isLiked: !isLiked,
+            likes: isLiked ? likes - 1 : likes + 1,
+          },
+        });
+      }
+    }
+  };
+  const [toggleLikeMutation] = useMutation<toggleLike, toggleLikeVariables>(
+    TOGGLE_LIKE_MUTATION,
+    {
+      variables: {
+        id,
+      },
+      update: updateToggleLike,
+    }
+  );
   return (
     <PhotoContainer key={id}>
       <PhotoHeader>
@@ -130,6 +167,12 @@ const Photo: React.FunctionComponent<PhotoProps> = ({
           </div>
         </PhotoActions>
         <Likes>{likes === 1 ? "1 like" : `${likes} likes`}</Likes>
+        <Comments
+          author={user?.username}
+          caption={caption}
+          commentNumber={commentNumber}
+          comments={comments}
+        />
       </PhotoData>
     </PhotoContainer>
   );
