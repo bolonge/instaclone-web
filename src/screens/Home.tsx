@@ -34,8 +34,6 @@ const FEED_QUERY = gql`
 
 const Home = () => {
   const { data } = useQuery<seeFeed>(FEED_QUERY);
-  console.log(data);
-
   return (
     <div>
       <PageTitle title="Home" />
@@ -45,6 +43,7 @@ const Home = () => {
           id={photo?.id}
           user={photo?.user}
           file={photo?.file}
+          caption={photo?.caption}
           likes={photo!.likes}
           isLiked={photo?.isLiked}
         ></Photo>

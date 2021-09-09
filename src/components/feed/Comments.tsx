@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { seeFeed_seeFeed_comments } from "../../__generated__/seeFeed";
 import Comment from "./Comment";
+
 interface CommentsProps {
   author?: string;
-  caption?: string;
+  caption?: string | null;
   commentNumber?: number;
   comments?: seeFeed_seeFeed_comments[] | null;
 }

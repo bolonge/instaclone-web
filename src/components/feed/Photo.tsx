@@ -27,7 +27,7 @@ interface PhotoProps {
   file?: string;
   likes: number;
   isLiked?: boolean;
-  caption?: string;
+  caption?: string | null;
   commentNumber?: number;
   comments?: seeFeed_seeFeed_comments[] | null;
 }
