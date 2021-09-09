@@ -101,27 +101,21 @@ const Photo: React.FunctionComponent<PhotoProps> = ({
   const updateToggleLike: MutationUpdaterFn<toggleLike> = (cache, result) => {
     const { data } = result;
     if (data?.toggleLike.ok) {
-      const fragmentId = `Photo:${id}`;
-      const fragment = gql`
-        fragment BSName on Photo {
-          isLiked
-          likes
-        }
-      `;
-      cache.readFragment({
-        id: fragmentId,
-        fragment: fragment,
-      });
-      if ("isLiked" in result && "likes" in result) {
-        cache.writeFragment({
-          id: fragmentId,
-          fragment: fragment,
-          data: {
-            isLiked: !isLiked,
-            likes: isLiked ? likes - 1 : likes + 1,
+      const photoId = `Photo:${id}`;
+      cache.modify({
+        id: photoId,
+        fields: {
+          isLiked(prev) {
+            return !prev;
           },
-        });
-      }
+          likes(prev) {
+            if (isLiked) {
+              return prev - 1;
+            }
+            return prev + 1;
+          },
+        },
+      });
     }
   };
   const [toggleLikeMutation] = useMutation<toggleLike, toggleLikeVariables>(
