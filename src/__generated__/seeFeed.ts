@@ -35,7 +35,7 @@ export interface seeFeed_seeFeed {
   file: string;
   caption: string | null;
   likes: number;
-  comments: (seeFeed_seeFeed_comments | null)[] | null;
+  comments: seeFeed_seeFeed_comments[] | null;
   commentNumber: number;
   createdAt: string;
   isMine: boolean;
@@ -43,5 +43,5 @@ export interface seeFeed_seeFeed {
 }
 
 export interface seeFeed {
-  seeFeed: (seeFeed_seeFeed | null)[] | null;
+  seeFeed: seeFeed_seeFeed[] | null;
 }

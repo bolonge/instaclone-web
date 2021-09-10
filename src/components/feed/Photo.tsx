@@ -89,7 +89,7 @@ const Likes = styled(FatText)`
 `;
 
 const Photo: React.FunctionComponent<PhotoProps> = ({
-  id = 0,
+  id,
   user,
   file,
   isLiked,
@@ -122,7 +122,7 @@ const Photo: React.FunctionComponent<PhotoProps> = ({
     TOGGLE_LIKE_MUTATION,
     {
       variables: {
-        id,
+        id: id!,
       },
       update: updateToggleLike,
     }
@@ -162,6 +162,7 @@ const Photo: React.FunctionComponent<PhotoProps> = ({
         </PhotoActions>
         <Likes>{likes === 1 ? "1 like" : `${likes} likes`}</Likes>
         <Comments
+          photoId={id}
           author={user?.username}
           caption={caption}
           commentNumber={commentNumber}
