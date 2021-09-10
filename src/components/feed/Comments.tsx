@@ -19,7 +19,7 @@ interface CommentsProps {
   author?: string;
   caption?: string | null;
   commentNumber?: number;
-  comments?: seeFeed_seeFeed_comments[] | null;
+  comments?: (seeFeed_seeFeed_comments | null)[] | null;
 }
 
 const CREATE_COMMENT_MUTATION = gql`
@@ -142,9 +142,9 @@ const Comments: React.FunctionComponent<CommentsProps> = ({
 
       {comments?.map((comment) => (
         <Comment
-          key={comment.id}
-          author={comment.user.username}
-          payload={comment.payload}
+          key={comment?.id}
+          author={comment?.user.username}
+          payload={comment?.payload}
         />
       ))}
       <PostCommentContainer>

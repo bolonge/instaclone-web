@@ -29,7 +29,7 @@ interface PhotoProps {
   isLiked?: boolean;
   caption?: string | null;
   commentNumber?: number;
-  comments?: seeFeed_seeFeed_comments[] | null;
+  comments?: (seeFeed_seeFeed_comments | null)[] | null;
 }
 
 const TOGGLE_LIKE_MUTATION = gql`
