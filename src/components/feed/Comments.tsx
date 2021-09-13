@@ -143,8 +143,11 @@ const Comments: React.FunctionComponent<CommentsProps> = ({
       {comments?.map((comment) => (
         <Comment
           key={comment?.id}
+          id={comment?.id}
+          photoId={photoId}
           author={comment?.user.username}
           payload={comment?.payload}
+          isMine={comment?.isMine}
         />
       ))}
       <PostCommentContainer>

@@ -1,11 +1,28 @@
+import { MutationUpdaterFn, useMutation } from "@apollo/client";
+import gql from "graphql-tag";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import {
+  deleteComment,
+  deleteCommentVariables,
+} from "../../__generated__/deleteComment";
 import { FatText } from "../shared";
 
+const DELETE_COMMENT_MUTATION = gql`
+  mutation deleteComment($id: Int!) {
+    deleteComment(id: $id) {
+      ok
+    }
+  }
+`;
+
 interface CommentProps {
+  id?: number;
+  photoId?: number;
   author?: string;
   payload?: string | null;
+  isMine?: boolean;
 }
 
 const CommentCaption = styled.span`
@@ -25,9 +42,41 @@ const CommentCotainer = styled.div`
 `;
 
 const Comment: React.FunctionComponent<CommentProps> = ({
+  id,
+  photoId,
   author,
   payload,
+  isMine,
 }) => {
+  const updateDeleteComment: MutationUpdaterFn<deleteComment> = (
+    cache,
+    result
+  ) => {
+    const { data } = result;
+    if (data?.deleteComment?.ok) {
+      cache.evict({ id: `Comment:${id}` });
+      cache.modify({
+        id: `Photo:${photoId}`,
+        fields: {
+          commentNumber(prev) {
+            return prev - 1;
+          },
+        },
+      });
+    }
+  };
+  const [deleteCommentMutation] = useMutation<
+    deleteComment,
+    deleteCommentVariables
+  >(DELETE_COMMENT_MUTATION, {
+    variables: {
+      id: id!,
+    },
+    update: updateDeleteComment,
+  });
+  const onDeleteClick = () => {
+    deleteCommentMutation();
+  };
   return (
     <CommentCotainer>
       <FatText>{author}</FatText>
@@ -42,6 +91,7 @@ const Comment: React.FunctionComponent<CommentProps> = ({
           )
         )}
       </CommentCaption>
+      {isMine ? <button onClick={onDeleteClick}>x</button> : null}
     </CommentCotainer>
   );
 };
