@@ -79,7 +79,9 @@ const Comment: React.FunctionComponent<CommentProps> = ({
   };
   return (
     <CommentCotainer>
-      <FatText>{author}</FatText>
+      <Link to={`users/${author}`}>
+        <FatText>{author}</FatText>
+      </Link>
       <CommentCaption>
         {payload?.split(" ").map((word, index) =>
           /#[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|\w]+/.test(word) ? (

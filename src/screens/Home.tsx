@@ -1,19 +1,18 @@
 import { gql, useQuery } from "@apollo/client";
 import Photo from "../components/feed/Photo";
 import PageTitle from "../components/PageTitle";
+import { PHOTO_FRAGMENT } from "../fragment";
 import { seeFeed } from "../__generated__/seeFeed";
 
 const FEED_QUERY = gql`
   query seeFeed {
+    ...PhotoFragment
     seeFeed {
-      id
       user {
         username
         avatar
       }
-      file
       caption
-      likes
       comments {
         id
         user {
@@ -24,12 +23,11 @@ const FEED_QUERY = gql`
         isMine
         createdAt
       }
-      commentNumber
       createdAt
       isMine
-      isLiked
     }
   }
+  ${PHOTO_FRAGMENT}
 `;
 
 const Home = () => {

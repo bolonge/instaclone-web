@@ -22,7 +22,7 @@ const SHeader = styled.header`
   justify-content: center;
 `;
 
-const Wrapper = styled.header`
+const Wrapper = styled.div`
   max-width: 930px;
   width: 100%;
   display: flex;
@@ -30,9 +30,9 @@ const Wrapper = styled.header`
   align-items: center;
 `;
 
-const Column = styled.header``;
+const Column = styled.div``;
 
-const Icon = styled.header`
+const Icon = styled.span`
   margin-left: 15px;
 `;
 
@@ -71,7 +71,9 @@ const Header: React.FunctionComponent<IProp> = () => {
               </Icon>
               {data?.me?.avatar ? (
                 <Icon>
-                  <Avatar url={data?.me?.avatar} />
+                  <Link to={`/users/${data.me.username}`}>
+                    <Avatar url={data?.me?.avatar} />
+                  </Link>
                 </Icon>
               ) : (
                 <Icon>
