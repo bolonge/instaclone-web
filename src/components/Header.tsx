@@ -71,7 +71,7 @@ const Header: React.FunctionComponent<IProp> = () => {
               </Icon>
               {data?.me?.avatar ? (
                 <Icon>
-                  <Link to={`/users/${data.me.username}`}>
+                  <Link to={`/users/${data?.me?.username}`}>
                     <Avatar url={data?.me?.avatar} />
                   </Link>
                 </Icon>
@@ -83,7 +83,7 @@ const Header: React.FunctionComponent<IProp> = () => {
             </IconsContainer>
           ) : (
             <Link to={routes.home}>
-              <Button></Button>
+              <Button>Login</Button>
             </Link>
           )}
         </Column>

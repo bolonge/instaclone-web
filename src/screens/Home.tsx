@@ -6,8 +6,8 @@ import { seeFeed } from "../__generated__/seeFeed";
 
 const FEED_QUERY = gql`
   query seeFeed {
-    ...PhotoFragment
     seeFeed {
+      ...PhotoFragment
       user {
         username
         avatar
@@ -26,7 +26,6 @@ const FEED_QUERY = gql`
 
 const Home = () => {
   const { data } = useQuery<seeFeed>(FEED_QUERY);
-  console.log(data?.seeFeed);
 
   return (
     <div>
