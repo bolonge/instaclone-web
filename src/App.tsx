@@ -36,8 +36,10 @@ function App() {
                   <SignUp />
                 </Route>
               ) : null}
-              <Route path={`users/:username`}>
-                <Profile></Profile>
+              <Route path={`/users/:username`}>
+                <Layout>
+                  <Profile></Profile>
+                </Layout>
               </Route>
               <Route>
                 <NotFound />

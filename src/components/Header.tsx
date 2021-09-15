@@ -64,7 +64,9 @@ const Header: React.FunctionComponent<IProp> = () => {
           {isLoggedIn ? (
             <IconsContainer>
               <Icon>
-                <FontAwesomeIcon size={"lg"} icon={faHome}></FontAwesomeIcon>
+                <Link to={routes.home}>
+                  <FontAwesomeIcon size={"lg"} icon={faHome}></FontAwesomeIcon>
+                </Link>
               </Icon>
               <Icon>
                 <FontAwesomeIcon size={"lg"} icon={faCompass}></FontAwesomeIcon>
