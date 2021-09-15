@@ -9,3 +9,16 @@ export const PHOTO_FRAGMENT = gql`
         isLiked
     }
 `
+
+export const COMMENT_FRAGMENT = gql`
+    fragment CommentFragment on Comment{
+        id
+        user {
+          username
+          avatar
+        }
+        payload
+        isMine
+        createdAt
+    }
+`
