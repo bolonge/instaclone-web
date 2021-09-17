@@ -45,6 +45,7 @@ const TOGGLE_LIKE_MUTATION = gql`
 const PhotoContainer = styled.div`
   background-color: white;
   border: 1px solid ${(props) => props.theme.borderColor};
+  border-radius: 4px;
   margin-bottom: 20px;
   max-width: 615px;
 `;
@@ -53,6 +54,7 @@ const PhotoHeader = styled.div`
   padding: 15px;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid rgb(239, 239, 239);
 `;
 
 const Username = styled(FatText)`
@@ -60,11 +62,12 @@ const Username = styled(FatText)`
 `;
 
 const PhotoFile = styled.img`
-  width: 100%;
+  min-height: 100%;
+  max-width: 100%;
 `;
 
 const PhotoData = styled.div`
-  padding: 15px;
+  padding: 12px 15px;
 `;
 
 const PhotoActions = styled.div`
@@ -82,6 +85,7 @@ const PhotoActions = styled.div`
 
 const PhotoAction = styled.div`
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 const Likes = styled(FatText)`

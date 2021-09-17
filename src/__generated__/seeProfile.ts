@@ -18,12 +18,11 @@ export interface seeProfile_seeProfile_photos {
 
 export interface seeProfile_seeProfile {
   __typename: "User";
-  id: string;
   firstName: string;
   lastName: string | null;
   username: string;
   bio: string | null;
-  avatar: string | undefined;
+  avatar: string | null;
   photos: (seeProfile_seeProfile_photos | null)[] | null;
   totalFollowing: number;
   totalFollowers: number;

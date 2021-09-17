@@ -1,18 +1,40 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import gql from "graphql-tag";
 import { useParams } from "react-router";
 import styled from "styled-components";
+import Button from "../components/auth/Button";
+import PageTitle from "../components/PageTitle";
 import { FatText } from "../components/shared";
 import { PHOTO_FRAGMENT } from "../fragment";
-import { seeProfile, seeProfileVariables } from "../__generated__/seeProfile";
+import {
+  seeProfile,
+  seeProfileVariables,
+  seeProfile_seeProfile,
+} from "../__generated__/seeProfile";
 
 interface ProfileProps {}
 
 interface ParamsProps {
   username: string;
 }
+
+const FOLLOW_USER_MUTATION = gql`
+  mutation followUser($username: String!) {
+    followUser(username: $username) {
+      ok
+    }
+  }
+`;
+
+const UNFOLLOW_USER_MUTATION = gql`
+  mutation unollowUser($username: String!) {
+    unfollowUser(username: $username) {
+      ok
+    }
+  }
+`;
 
 const SEE_PROFILE_QUERY = gql`
   query seeProfile($username: String!) {
@@ -53,6 +75,7 @@ const Username = styled.h3`
 const Row = styled.div`
   margin-bottom: 20px;
   font-size: 16px;
+  display: flex;
 `;
 const List = styled.ul`
   display: flex;
@@ -107,9 +130,27 @@ const Icon = styled.span`
   }
 `;
 
+const ProfileBtn = styled(Button).attrs({
+  as: "span",
+})`
+  margin-left: 10px;
+  margin-top: 0px;
+  cursor: pointer;
+`;
+
 const Profile: React.FunctionComponent<ProfileProps> = () => {
   const { username } = useParams<ParamsProps>();
-  const { data } = useQuery<seeProfile, seeProfileVariables>(
+  const [unfollowUser] = useMutation(UNFOLLOW_USER_MUTATION, {
+    variables: { username },
+    refetchQueries: [{ query: SEE_PROFILE_QUERY, variables: { username } }],
+  });
+
+  const [followUser] = useMutation(FOLLOW_USER_MUTATION, {
+    variables: { username },
+    refetchQueries: [{ query: SEE_PROFILE_QUERY, variables: { username } }],
+  });
+
+  const { data, loading } = useQuery<seeProfile, seeProfileVariables>(
     SEE_PROFILE_QUERY,
     {
       variables: {
@@ -117,16 +158,32 @@ const Profile: React.FunctionComponent<ProfileProps> = () => {
       },
     }
   );
-  console.log(data);
+
+  const getButton = (seeProfile: seeProfile_seeProfile) => {
+    const { isMe, isFollowing } = seeProfile;
+    if (isMe) {
+      return <ProfileBtn>Edit Profile</ProfileBtn>;
+    }
+    if (isFollowing) {
+      return <ProfileBtn onClick={() => unfollowUser()}>Unfollow</ProfileBtn>;
+    } else {
+      return <ProfileBtn onClick={() => followUser()}>Follow</ProfileBtn>;
+    }
+  };
 
   return (
     <div>
-      {" "}
+      <PageTitle
+        title={
+          loading ? "Loading..." : `${data?.seeProfile?.username}'s Profile'`
+        }
+      ></PageTitle>
       <Header>
         <Avatar src={data ? data.seeProfile!.avatar : undefined} />
         <Column>
           <Row>
             <Username>{data?.seeProfile?.username}</Username>
+            {data?.seeProfile ? getButton(data?.seeProfile) : null}
           </Row>
           <Row>
             <List>
